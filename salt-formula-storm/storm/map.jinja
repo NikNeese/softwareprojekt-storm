@@ -1,0 +1,25 @@
+{% set init_scripts = salt['grains.filter_by']({
+    'upstart': {
+      'storm_nimbus_service_script': 'storm-nimbus.conf',
+      'storm_supervisor_service_script': 'storm-supervisor.conf',
+      'storm_ui_service_script': 'storm-ui.conf',
+      'init_dir': '/etc/init'
+    },
+    'systemd': {
+      'storm_nimbus_service_script': 'storm-nimbus.service',
+      'storm_supervisor_service_script': 'storm-supervisor.service',
+      'storm_ui_service_script': 'storm-ui.service',
+      'init_dir': '/lib/systemd/system'
+    },
+}, grain='init', merge=salt['pillar.get']('storm:server')) %}
+
+{% set server = salt['grains.filter_by']({
+    'RedHat': {
+      'prefix': '/opt',
+      'tarball_file': '/tmp/apache-storm-1.1.1.tar.gz',
+      'source': 'https://archive.apache.org/dist/storm/apache-storm-1.1.1/apache-storm-1.1.1.tar.gz', 
+      'source_hash': 'md5=5786570DF5E9F7ED5F8E8BEC229A08F9',
+      'storm_real_home': '/opt/apache-storm-1.1.1',
+    },
+    'Debian': {},
+}, merge=init_scripts) %}

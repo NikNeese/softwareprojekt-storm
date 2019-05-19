@@ -1,0 +1,84 @@
+# -*- coding: utf-8 -*-
+# vim: filetype=yaml
+
+# These are the supported Pillars with their defaults
+
+java_home: /usr/lib/jvm/jre
+zookeeper:
+  source_url: 'https://archive.apache.org/dist/zookeeper/zookeeper-3.4.9/zookeeper-3.4.9.tar.gz' 
+  version: 3.4.9
+  # You can disable md5 checking if you know exactly what you are doing and set the following to an empty string.
+  source_md5: 3e8506075212c2d41030d874fcc9dcd2 
+  prefix: /usr/lib
+  uid: 6030
+  hosts_function: network.get_hostname
+  hosts_target: 'roles:zookeeper'
+  targeting_method: grain # [compound, glob] also supported
+  config:
+    data_dir: /var/lib/zookeeper/data
+    port: 2181
+    jmx_port: 2183
+    snap_count: None
+    snap_retain_count: 3
+    purge_interval: None
+    max_client_cnxns: None
+    max_perm_size: 128
+    max_heap_size: 1024
+    initial_heap_size: 256
+    jvm_opts: ''
+    log_level: INFO
+    quorum_port: 2888
+    election_port: 3888
+  restart_on_config: True
+# Use external service management instead init or systemd. default=False
+# process_control_system: True
+# You can use whatever you want not just Supervisord. default='supervisorctl restart zookeeper'
+# pcs_restart_command: 'supervisorctl restart zookeeper'
+# define service management package installed as dependency. default=supervisor
+# process_control_system: supervisor
+
+# Configure Salt Mine function with parameters used in zookeeper:hosts_function
+#
+# mine_functions:
+#   network.ip_addrs:
+#     interface: eth0
+
+# You can override everything in config: locally with grains, additionally
+# there is support for the bind_address grain
+#
+# zookeeper:
+#   config:
+#     bind_address: 0.0.0.0
+
+# If you want to provide your own list of zookeeper nodes you can use zookeeper:nodes parameter. 
+# In this case targeting method and `zookeeper:clusters` parameter will not be used. 
+# As a node identifier you can use hostname, IP address, fqdn, minion id.
+# You cannot use an IP address of the proxy server which redirects requests to the zookeeper node. 
+# You can use hostname of the proxy server which redirects requests to the zookeeper node only if 
+# zookeeper node has the same hostname as the proxy does.
+#
+# zookeeper:
+#   nodes:
+#     - 192.168.0.101
+#     - minion2
+#     - zookeeper3.mysite.com
+
+# In case you need several separate Zookeeper clusters you can use `zookeeper:clusters` parameter 
+# where you can specify a node list for each of your cluster. 
+# In this case targeting method will not be used.
+# As a node identifier you can use hostname, IP address, fqdn, minion id.
+# You cannot use an IP address of the proxy server which redirects requests to the zookeeper node. 
+# You can use hostname of the proxy server which redirects requests to the zookeeper node only if 
+# zookeeper node has the same hostname as the proxy does.
+# You cannot use the same minion for two different clusters.
+# 
+# zookeeper:
+#   clusters:
+#     cluster1:
+#       - 192.168.0.101
+#       - minion2
+#       - zookeeper3.cluster1.mysite.com
+#     cluster2:
+#       - 192.168.1.101
+#       - minion-hostname5
+#       - zookeeper3.cluster2.mysite.com

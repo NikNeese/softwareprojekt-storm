@@ -1,0 +1,12 @@
+[Unit]
+Description=Apache Zookeeper
+After=network.target
+
+[Service]
+User=zookeeper
+Group=zookeeper
+SyslogIdentifier=zookeeper
+ExecStart={{ alt_home }}/bin/zkServer.sh start-foreground
+
+[Install]
+WantedBy=multi-user.target
