@@ -10,11 +10,10 @@ the frontend project is containing code that will run on a local machine to fetc
 https://bitbucket.org/kingpfogel/softwareprojekt-storm/src/master/frontend/   
 frontend needs a hosts.txt which holds the information of all supervisor. this information is needed such that the frontend knows where to look for the gathered data
 ####Saltstack repositories
-Those two saltstack formulas were reduced and adjusted to instantly work with "Amazon Linux AMI 2018.03.0 (ami-03a71cec707bfc3d7)" that have a lot of programs preinstalled (java, python and other features).
+Those two saltstack formulas were adjusted to instantly work with "Amazon Linux AMI 2018.03.0 (ami-03a71cec707bfc3d7)" that have a lot of programs preinstalled (java, python and other features).
 The only preparational work that needs to be done is to follow the instructions to install salt and to configure salt and run it with the given top file
-####tbd-give the topfile-tbd-give the pillar file-tbd-describe master/minion config
 ####Salt-master (can also have a second identity as a minion)
-Sudo yum update
+sudo yum update
 sudo yum install https://repo.saltstack.com/yum/amazon/salt-amzn-repo-latest.amzn1.noarch.rpm
 sudo yum clean expire-cache
 sudo yum install salt-master
@@ -22,7 +21,7 @@ sudo yum install salt-minion
 
 Run the prepare.sh to configure the salt-master.
 ####Salt-minion
-Run the following commands
+Run the following commands:
 sudo yum update
 sudo yum install https://repo.saltstack.com/yum/amazon/salt-amzn-repo-latest.amzn1.noarch.rpm
 sudo yum clean expire-cache
