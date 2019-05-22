@@ -259,19 +259,21 @@ public class NegativeBolt extends BaseRichBolt{
 	public HashSet<String> ndictbuilder(String FILE){
 
 		String[] zeile=new String[4159];
-		String x = new File("").getAbsolutePath();
 		InputStream in = getClass().getResourceAsStream("/"+FILE);
-		try {@SuppressWarnings("resource")
-
-		BufferedReader bf = new BufferedReader(new InputStreamReader(in));
+		try { @SuppressWarnings("resource")
+			BufferedReader bf = new BufferedReader(new InputStreamReader(in));
 			int i=0;
-			while (i<4159) {zeile[i]=bf.readLine();i++;}}
+			while (i<4159) {
+				zeile[i]=bf.readLine();
+				i++;
+			}
+		}
 		catch (IOException e) { e.printStackTrace(); }
 		HashSet<String> dict = new HashSet<String>();
 		//int o=0;
 		for(int o=0;o<4159;o++){
-
-			dict.add(zeile[o]);}
+			dict.add(zeile[o]);
+		}
 		return dict;
 	}
 

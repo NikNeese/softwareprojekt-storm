@@ -1,8 +1,5 @@
 package code;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
@@ -79,17 +76,20 @@ public class PositiveBolt extends BaseRichBolt{
 			
 
 			String[] zeile=new String[2306];
-			//InputStream is = getClass().getResourceAsStream(FILE);
-			//String dir = System.getProperty("user.dir");
 
+			InputStream in = getClass().getResourceAsStream("/"+FILE);
 			File file=new File(FILE);//.getAbsolutePath();
 			 try {@SuppressWarnings("resource")
-
-				BufferedReader in = new BufferedReader(new FileReader(file));
-				int i=0;
-				
-				while (i<2306) {zeile[i]=in.readLine();i++;}}
-		    catch (IOException e) { e.printStackTrace(); }
+				 BufferedReader bf = new BufferedReader(new InputStreamReader(in));
+				 int i=0;
+				 while (i<2306) {
+				 	zeile[i]=bf.readLine();
+				 	i++;
+				 }
+			 }
+		    catch (IOException e) {
+			 	e.printStackTrace();
+			 }
 			 
 		HashSet<String> dict = new HashSet<String>();
 		//int o=0;
