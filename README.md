@@ -29,3 +29,7 @@ sudo yum install salt-minion
 
 For every minion there is one file to edit that is the '/etc/salt/minion', where you have to insert the following:      
 master: "ip of the salt master"   
+####Possible issues
+1. java_home is not correctly set in a configuration file.   
+2. storm will be installed under /opt/storm. This directory is owned by root:root. this can be changed by using: sudo chown ec2-user:ec2-user -R /opt/storm *    
+which is necessary in order to let the frontend be able to access the outputfile.
