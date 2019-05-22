@@ -13,17 +13,12 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 import java.io.*;
-import java.security.*;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.bouncycastle.*;
 import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.transport.TransportException;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
-import net.schmizz.sshj.userauth.UserAuthException;
 import net.schmizz.sshj.userauth.keyprovider.PKCS8KeyFile;
 import net.schmizz.sshj.xfer.FileSystemFile;
 
@@ -74,23 +69,21 @@ public class Functions {
         
         time = (double) System.currentTimeMillis();
 	}
-	public void mergeCsvs() {};
 	
-	
-	public static SSHClient createConnection(String hostname) throws IOException {
+	public static SSHClient createConnection(String hostname, String pemfile) throws IOException {
         SSHClient ssh = new SSHClient();
     	ssh.addHostKeyVerifier(new PromiscuousVerifier());
     	ssh.connect(hostname);
         PKCS8KeyFile keyFile = new PKCS8KeyFile();
-        keyFile.init(new File("C:\\Users\\Alibengali\\.ssh\\storm-18.pem"));
+        keyFile.init(new File(System.getProperty("user.home") + File.separator +".ssh" + File.separator + pemfile));
         ssh.authPublickey("ec2-user", keyFile);
     	return ssh;
-	};
-	public void createConnectionsWithAllHostsFromAFile(String filename) throws FileNotFoundException, IOException {
+	}
+	public void createConnectionsWithAllHostsFromAFile(String filename, String pemfile) throws IOException {
 		try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
-		    	cons.add(createConnection(line));
+		    	cons.add(createConnection(line, pemfile));
 		    }
 		}
 	}
@@ -113,8 +106,8 @@ public class Functions {
 
            for(SSHClient con: cons) {
                try {
-				con.newSCPFileTransfer().download("outfile.csv", new FileSystemFile("C:\\Users\\Alibengali\\Desktop\\out"+x+".csv"));
-            	BufferedReader brTest = new BufferedReader(new FileReader("C:\\Users\\Alibengali\\Desktop\\out"+x+".csv"));
+				con.newSCPFileTransfer().download("outfile.csv", new FileSystemFile(System.getProperty("user.home") + File.separator + "out"+x+".csv"));
+            	BufferedReader brTest = new BufferedReader(new FileReader(System.getProperty("user.home") + File.separator + "out"+x+".csv"));
 			    String[] text = brTest.readLine().split(",");
 			    count_ldn+=Integer.parseInt(text[0]);
 			    count_sf+=Integer.parseInt(text[1]);
@@ -133,17 +126,14 @@ public class Functions {
             count_sf = 0;
           }
           
-        };	
-
-        timer.schedule(task, 0, 2000);
-
-		
-	};
+        };
+        timer.schedule(task, 0, 5000);
+	}
 
 	
-	public static void main(String[] args) throws FileNotFoundException, IOException {
+	public static void main(String[] args) throws IOException {
 		Functions f = new Functions();
-		f.createConnectionsWithAllHostsFromAFile("hosts.txt");
+		f.createConnectionsWithAllHostsFromAFile(args[0], args[1]);
 		f.printGraph();
 	}
 }
