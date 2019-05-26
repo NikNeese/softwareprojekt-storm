@@ -32,6 +32,16 @@ To list all accepted and unaccepted minion keys:
 sudo salt-key -L    
 To accept unaccepted minion keys:   
 sudo salt-key -A  
+#### Run the top.sls
+cd /srv/formulas
+sudo salt '\*' state.apply
+#### Change owner of the storm directory on nimbus and supervisor
+sudo chown ec2-user:ec2-user -R storm*
+#### Start nimbus/ui and the supervisor(s) and launch your jar from the nimbus machine. The necessary commands are:
+/opt/storm/bin/storm nimbus
+/opt/storm/bin/storm ui
+/opt/storm/bin/storm supervisor
+/opt/storm/bin/storm jar example.jar package.ExampleMain <program args>
 ####Possible issues
 1. java_home is not correctly set in a configuration file.   
 2. storm will be installed under /opt/storm. This directory is owned by root:root. this can be changed by using: sudo chown ec2-user:ec2-user -R /opt/storm *    
