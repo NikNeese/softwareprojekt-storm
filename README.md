@@ -32,6 +32,9 @@ To list all accepted and unaccepted minion keys:
 sudo salt-key -L    
 To accept unaccepted minion keys:   
 sudo salt-key -A  
+#### Before running the top.sls, edit the storm.yaml that will be installed:
+change the ip address of the zookeeper and of the nimbus.seeds
+/srv/formulas/salt-formula-storm/storm/files/storm.yaml
 #### Run the top.sls
 cd /srv/formulas
 sudo salt '\*' state.apply
