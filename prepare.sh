@@ -9,6 +9,7 @@ sudo mkdir -p /srv/{formulas,pillar,salt}
 sudo cp softwareprojekt-storm/zookeeper-formula /srv/formulas/
 sudo cp softwareprojekt-storm/salt-formula-storm /srv/formulas/
 sudo cp softwareprojekt-storm/top.sls /srv/formulas/
+sudo mv /srv/formulas/zookeeper-formula/pillar.example /srv/pillar/
 cat <<EOT >> master
 file_roots:
   base:
