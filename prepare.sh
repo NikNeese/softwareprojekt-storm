@@ -6,7 +6,7 @@ file_roots:
     - /srv/salt/
     - /srv/formulas
     - /srv/formulas/zookeeper-formula
-    - /srv/formulas/salt-formula-storm-1
+    - /srv/formulas/salt-formula-storm
 pillar_roots:
   base:
     - /srv/pillar
