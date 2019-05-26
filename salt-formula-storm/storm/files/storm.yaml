@@ -1,6 +1,6 @@
 storm.zookeeper.servers:
   - "ec2-18-197-144-153.eu-central-1.compute.amazonaws.com"
-nimbus.host: "ec2-52-58-104-253.eu-central-1.compute.amazonaws.com"
+nimbus.seeds: ["ec2-52-58-104-253.eu-central-1.compute.amazonaws.com"]
 storm.local.dir: "/home/ec2-user/storm/datadir/storm"
 supervisor.slots.ports:
     - 6700
