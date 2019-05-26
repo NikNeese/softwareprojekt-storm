@@ -36,7 +36,7 @@ sudo yum install salt-master
 sudo yum install salt-minion   
 sudo yum install salt-ssh   
 #### Maybe you have to start/restart the services
-sudo service salt-minion start
+sudo service salt-minion start    
 sudo service salt-master start
 #### Accepting the minions on the salt-master
 To list all accepted and unaccepted minion keys:   
