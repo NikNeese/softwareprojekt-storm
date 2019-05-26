@@ -22,8 +22,48 @@ sudo yum clean expire-cache
 sudo yum install salt-minion   
 
 For every minion there is one file to edit that is the '/etc/salt/minion', where you have to insert the following:      
-master: "ip of the salt master"   
+master: "ip of the salt master"
+
+#### Maybe you have to start/restart the services
+sudo service salt-minion start    
+sudo service salt-master start
+#### Accepting the minions on the salt-master
+To list all accepted and unaccepted minion keys:   
+sudo salt-key -L    
+To accept unaccepted minion keys:   
+sudo salt-key -A  
 ####Possible issues
 1. java_home is not correctly set in a configuration file.   
 2. storm will be installed under /opt/storm. This directory is owned by root:root. this can be changed by using: sudo chown ec2-user:ec2-user -R /opt/storm *    
 which is necessary in order to let the frontend be able to access the outputfile.
+
+
+
+### Launching AWS-Instances
+Login - Use the find services searchfield and enter "EC2"    
+Click "Launch instance"    
+Configure the instance details (I will stick to my configurations)    
+#### Choose AMI
+Search for either "ami-0cfbf4f6db41068ac" or "Amazon Linux" version one with Java and Python preinstalled
+#### Choose Instance Type
+As is (t2.micro)
+#### Configure Instance
+Change "Number of instances" to 3
+#### Add Storage
+Next
+#### Add Tags
+Add tag: Key=name and Value=<a descriptive name>
+#### Configure Security Group
+##### Allowing all outbound traffic
+##### Inbound Rules accessible ports from within the security group
+2181 Zookeeper   
+6700-6703 default supervisor.slot.ports    
+6627 nimbus.thrift.port   
+4505-4506 salt    
+3772-3774 not sure if necessary, some drpc ports   
+##### Inbound Rules (open to the world - any IP address (or at least open to the ip address of the frontend application))
+22 ssh   
+8080 ui.port   
+8000 logviewer port   
+#### Review
+Launch the instances   
