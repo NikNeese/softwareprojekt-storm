@@ -2,6 +2,7 @@
 This repository is a conglomerate of 4 parts of the project.   
 Firstly there are the twitterpipeline and the frontend which both represent parts of the programming work done.  
 Secondly there are 2 repositories which contain saltstack formulas which are easy to run once salt is installed.  
+In this overview you will find short descriptions of the parts above and a tutorial on how to setup AWS instances with Amazon Linux and how to install and configure ApacheStorm and Zookeeper.
 ####twitterpipeline
 twitterpipeline is the backend part which will run on a storm production cluster (hosted on AWS). It will do the calcutlations and data transformations that were needed to process the data   
 https://bitbucket.org/kingpfogel/softwareprojekt-storm/src/master/twitterpipeline/
@@ -12,6 +13,8 @@ frontend needs a hosts.txt which holds the information of all supervisor. this i
 ####Saltstack repositories
 Those two saltstack formulas were adjusted to instantly work with "Amazon Linux AMI 2018.03.0 (ami-03a71cec707bfc3d7)" that have a lot of programs preinstalled (java, python and other features).
 The only preparational work that needs to be done is to follow the instructions to install salt and to configure salt and run it with the given top file
+###Setting up Salt, Storm and Zookeeper
+Choose one machine as your salt-master and the other instances as minions and follow the instructions below
 ####Salt-master (can also have a second identity as a minion)  
 Run the prepare.sh to configure the salt-master.
 ####Salt-minion
@@ -25,29 +28,29 @@ For every minion there is one file to edit that is the '/etc/salt/minion', where
 master: "ip of the salt master"
 
 #### Maybe you have to start/restart the services
-sudo service salt-minion start    
-sudo service salt-master start
+sudo service salt-minion start/restart   
+sudo service salt-master start/restart
 #### Accepting the minions on the salt-master
 To list all accepted and unaccepted minion keys:   
 sudo salt-key -L    
 To accept unaccepted minion keys:   
 sudo salt-key -A  
 #### Before running the top.sls, edit the storm.yaml that will be installed:
-change the ip address of the zookeeper and of the nimbus.seeds
+Change the ip address of the zookeeper and of the nimbus.seeds in the storm.yaml:   
 /srv/formulas/salt-formula-storm/storm/files/storm.yaml
 #### Run the top.sls
 cd /srv/formulas
 sudo salt '\*' state.apply
 #### Change owner of the storm directory on nimbus and supervisor
 sudo chown ec2-user:ec2-user -R storm*
-#### Start nimbus/ui and the supervisor(s) and launch your jar from the nimbus machine. The necessary commands are:
+#### Start nimbus/ui and the supervisor(s) and launch your jar from the nimbus machine. The necessary commands are (1-3 on the nimbus, 4 on the supervisor):
 /opt/storm/bin/storm nimbus   
-/opt/storm/bin/storm ui   
-/opt/storm/bin/storm supervisor   
+/opt/storm/bin/storm ui     
 /opt/storm/bin/storm jar example.jar package.ExampleMain <program args>   
-####Possible issues
+/opt/storm/bin/storm supervisor 
+#### Possible issues
 1. java_home is not correctly set in a configuration file.   
-2. storm will be installed under /opt/storm. This directory is owned by root:root. this can be changed by using: sudo chown ec2-user:ec2-user -R /opt/storm *    
+2. storm will be installed under /opt/storm. This directory is owned by root:root. this can be changed by using: sudo chown ec2-user:ec2-user -R /opt/storm*    
 which is necessary in order to let the frontend be able to access the outputfile.
 
 
