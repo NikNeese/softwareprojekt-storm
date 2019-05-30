@@ -42,7 +42,7 @@ Change the ip address of the zookeeper and of the nimbus.seeds in the storm.yaml
 cd /srv/formulas
 sudo salt '\*' state.apply
 #### Change owner of the storm directory on nimbus and supervisor
-sudo chown ec2-user:ec2-user -R storm*
+sudo chown ec2-user:ec2-user -R /opt/storm*
 #### Start nimbus/ui and the supervisor(s) and launch your jar from the nimbus machine. The necessary commands are (1-3 on the nimbus, 4 on the supervisor):
 /opt/storm/bin/storm nimbus   
 /opt/storm/bin/storm ui     
