@@ -4,21 +4,21 @@ This repository is a conglomerate of 4 parts of the project.
 Firstly there are the twitterpipeline and the frontend which both represent parts of the programming work done.  
 Secondly there are 2 repositories which contain saltstack formulas which are easy to run once salt is installed.  
 In this overview you will find short descriptions of the parts above and a tutorial on how to setup AWS instances with Amazon Linux and how to install and configure ApacheStorm and Zookeeper.
-####twitterpipeline
+#### twitterpipeline
 twitterpipeline is the backend part which will run on a storm production cluster (hosted on AWS). It will do the calcutlations and data transformations that were needed to process the data   
-https://bitbucket.org/kingpfogel/softwareprojekt-storm/src/master/twitterpipeline/
-####frontend
+https://github.com/NikNeese/softwareprojekt-storm/tree/master/twitterpipeline
+#### frontend
 the frontend project is containing code that will run on a local machine to fetch the transformed data from the backend and creating a live-graph.   
-https://bitbucket.org/kingpfogel/softwareprojekt-storm/src/master/frontend/   
+https://github.com/NikNeese/softwareprojekt-storm/tree/master/frontend/   
 frontend needs a hosts.txt which holds the information of all supervisor. this information is needed such that the frontend knows where to look for the gathered data
-####Saltstack repositories
+#### Saltstack repositories
 Those two saltstack formulas were adjusted to instantly work with "Amazon Linux AMI 2018.03.0 (ami-03a71cec707bfc3d7)" that have a lot of programs preinstalled (java, python and other features).
 The only preparational work that needs to be done is to follow the instructions to install salt and to configure salt and run it with the given top file
-###Setting up Salt, Storm and Zookeeper
+### Setting up Salt, Storm and Zookeeper
 Choose one machine as your salt-master and the other instances as minions and follow the instructions below
-####Salt-master (can also have a second identity as a minion)  
+#### Salt-master (can also have a second identity as a minion)  
 Run the prepare.sh to configure the salt-master.
-####Salt-minion
+#### Salt-minion
 Run the following commands:    
 sudo yum update   
 sudo yum install https://repo.saltstack.com/yum/amazon/salt-amzn-repo-latest.amzn1.noarch.rpm   
