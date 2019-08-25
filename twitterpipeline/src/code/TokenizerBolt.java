@@ -34,7 +34,7 @@ public class TokenizerBolt extends BaseRichBolt {
 	TokenizerBolt(){
 		
 	}
-//	HashSet<String> dict=dictbuilder("C:/Users/Alibengali/workspace/test2/doppelteraus.txt");
+
 
 
 
@@ -50,10 +50,10 @@ public class TokenizerBolt extends BaseRichBolt {
 	    public void execute(Tuple tuple) {
 		    Status tmp = (Status) tuple.getValue(0);
 		    String txt = tmp.getText();
-	    	//String pretemp=""+tuple.getString(0);
-			//String temp=(pretemp.substring(pretemp.indexOf("Text1=") + 6, pretemp.indexOf("-geoLocation=")).toLowerCase());
+
+
 			
-			//ArrayList<String> tokens = new ArrayList<String>();
+
 			ArrayList<String> substrings = new ArrayList<String>();
 			
 	
@@ -78,8 +78,8 @@ public class TokenizerBolt extends BaseRichBolt {
 
     		}
 
-        LOG.debug("niklas_token"+toks.size());
-        LOG.info("niklas_token"+toks.size());
+        //LOG.debug("niklas_token"+toks.size());
+        //LOG.info("niklas_token"+toks.size());
 		_collector.emit(tuple, new Values(toks, substrings, tuple.getString(1), tuple.getLong(2),tuple.getLongByField("start")));
 		_collector.ack(tuple);
 			

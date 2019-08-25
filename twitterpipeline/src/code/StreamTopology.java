@@ -33,7 +33,7 @@ public class StreamTopology implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = LoggerFactory.getLogger(StreamTopology.class);
 
-    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
+    public static void main(String[] args) throws AuthorizationException {
     	//consumerKey, consumerSecret, accessToken& accesTokenSecret needed to login to the twitter stream
     	
     	String topologyName = "default - test";
@@ -73,13 +73,11 @@ public class StreamTopology implements Serializable {
 
 
         if(args.length==2) {
-        	
-              builder.setBolt("negative", (IRichBolt) new NegativeBolt(f1, false))
+            builder.setBolt("negative", (IRichBolt) new NegativeBolt(f1, true))
         				.fieldsGrouping("positive", new Fields("count","tokens","hashtags", "city", "timelong","start"));
-              Config conf = new Config();
-              LocalCluster cluster = new LocalCluster();
-              cluster.submitTopology(topologyName, conf, builder.createTopology());
-
+            Config conf = new Config();
+            LocalCluster cluster = new LocalCluster();
+            cluster.submitTopology(topologyName, conf, builder.createTopology());
         } else {
             builder.setBolt("negative", (IRichBolt) new NegativeBolt(f1, false))
     				.fieldsGrouping("positive", new Fields("count","tokens","hashtags", "city", "timelong","start"));

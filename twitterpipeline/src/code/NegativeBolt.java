@@ -32,7 +32,7 @@ public class NegativeBolt extends BaseRichBolt{
 	static Integer county_ny=0;
 	static Integer count_ldn=0;
 	static Integer count_sf=0;
-	//private static final Logger LOG = LoggerFactory.getLogger(NegativeBolt.class);
+
 
 	long time;
 	long avg_execution_time=0;
@@ -45,11 +45,10 @@ public class NegativeBolt extends BaseRichBolt{
 	private boolean graphics;
 	File file2;
 
-
 	NegativeBolt(long time, boolean graphics){
 		this.time = time;
 		this.graphics = graphics;
-		//this.time=time;
+
 		negdict=ndictbuilder("negativewords.txt");
 		realID=id;
 		++id;
@@ -62,12 +61,12 @@ public class NegativeBolt extends BaseRichBolt{
 
 	public void prepare(@SuppressWarnings("rawtypes") Map conf, TopologyContext context, OutputCollector collector) {
 		_collector = collector;
-		//graphics is on when run in local mode
+
 		if(this.graphics) {
-			//the following code&comment is taken from jchart2d examples: http://jchart2d.sourceforge.net/usage.shtml and extended
+
 			Chart2D chart = new Chart2D();
-			// Create an ITrace:
-			// Note that dynamic charts need limited amount of values!!!
+
+
 			london = new Trace2DLtd(200);
 			london.setColor(Color.RED);
 			london.setName("London");
@@ -77,7 +76,7 @@ public class NegativeBolt extends BaseRichBolt{
 			SF = new Trace2DLtd(200);
 			SF.setColor(Color.BLACK);
 			SF.setName("San Francisco");
-			// Add the trace to the chart:
+
 			chart.addTrace(london);
 			chart.addTrace(NY);
 			chart.addTrace(SF);
@@ -91,13 +90,13 @@ public class NegativeBolt extends BaseRichBolt{
 			IAxis axisY = chart.getAxisY();
 			axisY.setPaintGrid(true);
 
-			// Create a frame.
+
 			JFrame frame = new JFrame("MinimalDynamicChart");
-			// add the chart to the frame:
+
 			frame.getContentPane().add(chart);
 			frame.setSize(600, 400);
 			frame.setLocation(200, 200);
-			// the program is terminated if one of the windows is closed
+
 			frame.addWindowListener(
 					new WindowAdapter() {
 						public void windowClosing(WindowEvent e){
@@ -105,7 +104,7 @@ public class NegativeBolt extends BaseRichBolt{
 						}
 					}
 			);
-			// Make it visible
+
 			frame.setVisible(true);
 			Timer timer = new Timer(false);
 			TimerTask task = new TimerTask(){
@@ -118,58 +117,48 @@ public class NegativeBolt extends BaseRichBolt{
 				}
 
 			};
-
-			// Every 20 milliseconds a new value is collected.
 			timer.schedule(task, 0, 1000);
-
 		}
-		else {
-			File file = new File(System.getProperty("user.home") + File.separator + "Textual_Data_Analysis"+realID+".csv");
-			try {
-				if(file.exists()) {file.delete();}
-				file.createNewFile();
+		File file = new File(System.getProperty("user.home") + File.separator + "Textual_Data_Analysis"+realID+".csv");
+		try {
+			if(file.exists()) {file.delete();}
+			file.createNewFile();
 
-				writer = new FileWriter(file, true);
-				writer.write("Time in ms,LDN,SF,NY,AVG_LDN,AVG_SF,AVG_NY,tweetprocessingtime\n");
+			writer = new FileWriter(file, true);
+			writer.write("Time in ms,LDN,SF,NY,AVG_LDN,AVG_SF,AVG_NY,tweetprocessingtime\n");
 
-				Timer timer = new Timer(false);
-				TimerTask task = new TimerTask(){
-					double avg_ldn=0;
-					double avg_sf=0;
-					double avg_ny=0;
-					int count = 1;
-					int pre_ldn=0, pre_sf=0, pre_ny=0;
-					@Override
-					public void run() {
-						try {
-							count++;
-							pre_ldn=count_ldn;
-							pre_sf=count_sf;
-							pre_ny=county_ny;
-							avg_ldn=(double) Math.round(((pre_ldn)/(double) count)*100d)/100d;
-							avg_sf=(double) Math.round(((pre_sf)/(double) count)*100d)/100d;
-							avg_ny=(double) Math.round(((pre_ny)/(double) count)*100d)/100d;
-
-							//avg_ldn=(double) Math.round(((pre_ldn+avg_ldn)/2.0)*100d)/100d;
-							//avg_sf=(double) Math.round(((pre_sf+avg_sf)/2.0)*100d)/100d;
-							//avg_ny=(double) Math.round(((pre_ny+avg_ny/2.0)*100d)/100d;
-							writer.write((System.currentTimeMillis()-time)+","+count_ldn+","+count_sf+","+county_ny+","+avg_ldn+","+avg_sf+","+avg_ny+","+avg_execution_time+"\n");
-							writer.flush();
-							writer2 = new FileWriter(file2,false);
-							writer2.write(""+count_ldn+","+count_sf+","+county_ny);
-							writer2.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+			Timer timer = new Timer(false);
+			TimerTask task = new TimerTask(){
+				double avg_ldn=0;
+				double avg_sf=0;
+				double avg_ny=0;
+				int count = 1;
+				int pre_ldn=0, pre_sf=0, pre_ny=0;
+				@Override
+				public void run() {
+					try {
+						count++;
+						pre_ldn=count_ldn;
+						pre_sf=count_sf;
+						pre_ny=county_ny;
+						avg_ldn=(double) Math.round(((pre_ldn)/(double) count)*100d)/100d;
+						avg_sf=(double) Math.round(((pre_sf)/(double) count)*100d)/100d;
+						avg_ny=(double) Math.round(((pre_ny)/(double) count)*100d)/100d;
+						
+						writer.write((System.currentTimeMillis()-time)+","+count_ldn+","+count_sf+","+county_ny+","+avg_ldn+","+avg_sf+","+avg_ny+","+avg_execution_time+"\n");
+						writer.flush();
+						writer2 = new FileWriter(file2,false);
+						writer2.write(""+count_ldn+","+count_sf+","+county_ny);
+						writer2.close();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
+				}
 
-				};
-				timer.schedule(task, 5000, 5000);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-
+			};
+			timer.schedule(task, 5000, 5000);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -193,7 +182,6 @@ public class NegativeBolt extends BaseRichBolt{
 
 		i=0;
 
-		//	 System.out.println("size"+hashtags.size());
 		while(i<hashtags.size()){
 			if( negdict.contains(hashtags.get(i))){
 				count--;
@@ -204,46 +192,34 @@ public class NegativeBolt extends BaseRichBolt{
 		String city=tuple.getString(3);
 		if(city.equals("New York")){
 			if(-count>tuple.getInteger(0)){
-				//LOG.info("if::"+city+"_-1");
 				county_ny-=1;
 			}
 			else if(-count<tuple.getInteger(0)){
-				//LOG.info("if::"+city+"_-1");
 				county_ny+=1;
 			}
 		}
 		if(city.equals("London")){
-			//synchronized(count_ldn) {
-			//LOG.info("if::LL");
-			//	count_ldn+=(count+tuple.getInteger(0));
 			if(-count>tuple.getInteger(0)){
-				//LOG.info("if::London_-1");
 				count_ldn-=1;
 			}
 			else if(-count<tuple.getInteger(0)){
-				//LOG.info("if::London_+1");
 				count_ldn+=1;
 			}
 			else {
-				//LOG.info("whyamihere");
+				//nothing
 			}
-			//}
 		}
 		if(city.equals("San Francisco")){
-			//synchronized(count_sf) {
-			//LOG.info("if::SF");
 			if(-count>tuple.getInteger(0)){
-				//LOG.info("if::"+city+"_-1");
 				count_sf-=1;
 			}
 			else if(-count<tuple.getInteger(0)){
-				//LOG.info("if::"+city+"_+1");
 				count_sf+=1;
 			}
 			else {
-				//LOG.info("whyamihere");
+
 			}
-			//}
+
 		}
 
 	}
@@ -270,11 +246,14 @@ public class NegativeBolt extends BaseRichBolt{
 		}
 		catch (IOException e) { e.printStackTrace(); }
 		HashSet<String> dict = new HashSet<String>();
-		//int o=0;
+
 		for(int o=0;o<4159;o++){
 			dict.add(zeile[o]);
 		}
 		return dict;
 	}
 
+	public void calculateAndTextoutput(){
+
+	}
 }

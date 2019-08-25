@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
-//import com.jidesoft.utils.Base64.InputStream;
+
 
 import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -55,9 +55,9 @@ public class PositiveBolt extends BaseRichBolt{
 		
 			 
 		 }
-		//	System.out.println(poscount);
-		// posdict.contains();
-		// System.out.println(tuple.getString(1));
+
+
+
 
 			_collector.emit(tuple, new Values(poscount, tokens, hashtags, tuple.getString(2),tuple.getLong(3), tuple.getLongByField("start")));
 			_collector.ack(tuple);
@@ -78,7 +78,7 @@ public class PositiveBolt extends BaseRichBolt{
 			String[] zeile=new String[2306];
 
 			InputStream in = getClass().getResourceAsStream("/"+FILE);
-			File file=new File(FILE);//.getAbsolutePath();
+			File file=new File(FILE);
 			 try {@SuppressWarnings("resource")
 				 BufferedReader bf = new BufferedReader(new InputStreamReader(in));
 				 int i=0;
@@ -92,7 +92,7 @@ public class PositiveBolt extends BaseRichBolt{
 			 }
 			 
 		HashSet<String> dict = new HashSet<String>();
-		//int o=0;
+
 		for(int o=0;o<2306;o++){
 			
 		dict.add(zeile[o]);}
